@@ -25,7 +25,6 @@ from .loggers import (
     LogManagerConfig,
     LogWriter,
     LogWriterConfig,
-    TensorBoardWriter,
 )
 from .schedulers import batch_schedulers
 
@@ -64,9 +63,9 @@ class TrainerConfig(Config):
     checkpointer_config
         Settings for the Checkpointer
     logging
-        If True, log metrics (to file or Tensorboard) during training
+        If True, log metrics (to file) during training
     log_writer
-        The type of LogWriter to use (one of ["json", "tensorboard"])
+        The type of LogWriter to use (one of ["json"])
     log_writer_config
         Settings for the LogWriter
     optimizer
@@ -96,7 +95,7 @@ class TrainerConfig(Config):
     checkpointing: bool = False
     checkpointer_config: CheckpointerConfig = CheckpointerConfig()  # type:ignore
     logging: bool = False
-    log_writer: str = "tensorboard"
+    log_writer: str = "json"
     log_writer_config: LogWriterConfig = LogWriterConfig()  # type:ignore
     optimizer: str = "adam"
     optimizer_config: OptimizerConfig = OptimizerConfig()  # type:ignore
@@ -126,7 +125,7 @@ class Trainer:
     log_manager
         Identifies when its time to log or evaluate on the valid set
     log_writer
-        Writes training statistics to file or TensorBoard
+        Writes training statistics to file
     optimizer
         Updates model weights based on the loss
     lr_scheduler
@@ -268,10 +267,6 @@ class Trainer:
         if self.config.logging:
             if self.config.log_writer == "json":
                 self.log_writer = LogWriter(**self.config.log_writer_config._asdict())
-            elif self.config.log_writer == "tensorboard":
-                self.log_writer = TensorBoardWriter(
-                    **self.config.log_writer_config._asdict()
-                )
             else:
                 raise ValueError(
                     f"Unrecognized writer option: {self.config.log_writer}"

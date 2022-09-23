@@ -17,7 +17,7 @@ from snorkel.classification import (
     Task,
     Trainer,
 )
-from snorkel.classification.training.loggers import LogWriter, TensorBoardWriter
+from snorkel.classification.training.loggers import LogWriter
 
 TASK_NAMES = ["task1", "task2"]
 base_config = {"n_epochs": 1, "progress_bar": False}
@@ -111,38 +111,6 @@ class TrainerTest(unittest.TestCase):
             }
             with self.assertRaises(TypeError):
                 trainer = Trainer(**base_config, **broken_config, logging=False)
-                trainer.fit(model, [dataloaders[0]])
-
-    def test_log_writer_init(self):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            log_writer_config = {"log_dir": temp_dir}
-            trainer = Trainer(
-                **base_config,
-                logging=True,
-                log_writer="json",
-                log_writer_config=log_writer_config,
-            )
-            trainer.fit(model, [dataloaders[0]])
-            self.assertIsInstance(trainer.log_writer, LogWriter)
-
-            log_writer_config = {"log_dir": temp_dir}
-            trainer = Trainer(
-                **base_config,
-                logging=True,
-                log_writer="tensorboard",
-                log_writer_config=log_writer_config,
-            )
-            trainer.fit(model, [dataloaders[0]])
-            self.assertIsInstance(trainer.log_writer, TensorBoardWriter)
-
-            log_writer_config = {"log_dir": temp_dir}
-            with self.assertRaisesRegex(ValueError, "Unrecognized writer"):
-                trainer = Trainer(
-                    **base_config,
-                    logging=True,
-                    log_writer="foo",
-                    log_writer_config=log_writer_config,
-                )
                 trainer.fit(model, [dataloaders[0]])
 
     def test_log_writer_json(self):

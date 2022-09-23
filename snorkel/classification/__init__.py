@@ -11,6 +11,5 @@ from .training.loggers import (  # noqa: F401
     LogManagerConfig,
     LogWriter,
     LogWriterConfig,
-    TensorBoardWriter,
 )
 from .training.trainer import Trainer  # noqa: F401
