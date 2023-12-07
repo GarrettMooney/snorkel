@@ -12,10 +12,6 @@ with open("snorkel/version.py", "r") as version_file:
 with open("README.md", "r") as readme_file:
     long_description = readme_file.read()
 
-tensorboard_packages = [
-    "tensorboard>=2.9.1",
-]
-
 setup(
     name="snorkel",
     version=VERSION["VERSION"],
@@ -48,9 +44,6 @@ setup(
         "torch>=1.2.0",
         "networkx>=2.2",
     ],
-    extras_require={
-        "tensorboard": tensorboard_packages,
-    },
     python_requires=">=3.6",
     keywords="machine-learning ai weak-supervision",
 )
